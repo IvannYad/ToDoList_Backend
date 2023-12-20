@@ -3,11 +3,9 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using ToDoList.DAL.Enum;
 
-namespace ToDoList.DAL.Entities
+namespace ToDoList.DAL.Entity
 {
     internal class Task
     {
@@ -33,6 +31,6 @@ namespace ToDoList.DAL.Entities
         public DateTime TaskEndTime { get; set; }
 
         [Required]
-        public int Status { get; set; }
+        public TasksStatus Status { get; set; }
     }
 }
