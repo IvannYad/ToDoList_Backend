@@ -11,7 +11,7 @@ using ToDoList.DAL.Repository.Interfaces;
 
 namespace ToDoList.DAL.Repository
 {
-    internal class Repository<T> : IRepository<T>
+    public class Repository<T> : IRepository<T>
         where T : class
     {
         private DbSet<T> _dbSet { get; set; }
