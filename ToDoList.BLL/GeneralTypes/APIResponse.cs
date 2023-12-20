@@ -18,11 +18,14 @@ namespace ToDoList.BLL.GeneralTypes
         public void Generate200OK(object? data)
             => GenerateResponse(true, null, HttpStatusCode.OK, data);
 
-        public void Generate400BadRequest(List<string>? errorMessages)
-            => GenerateResponse(false, errorMessages, HttpStatusCode.BadRequest, null);
+        public void Generate400BadRequest(params string[] errorMessages)
+            => GenerateResponse(false, errorMessages.ToList(), HttpStatusCode.BadRequest, null);
 
-        public void Generate404NotFound(List<string>? errorMessages)
-            => GenerateResponse(false, errorMessages, HttpStatusCode.NotFound, null);
+        public void Generate404NotFound(params string[] errorMessages)
+            => GenerateResponse(false, errorMessages.ToList(), HttpStatusCode.NotFound, null);
+
+        public void Generate204NoContent()
+            => GenerateResponse(true, null, HttpStatusCode.NoContent, null);
 
 
         private void GenerateResponse(bool isSuccess

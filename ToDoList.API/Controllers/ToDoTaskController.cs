@@ -20,7 +20,7 @@ namespace ToDoList.API.Controllers
         {
             _toDoTaskRepository = toDoTaskRepository;
             _mapper = mapper;
-            _response = new();
+            _response = new() { ErrorMessages = new List<string>()};
         }
 
         [HttpGet]
@@ -30,8 +30,9 @@ namespace ToDoList.API.Controllers
             try
             {
                 var tasks = _toDoTaskRepository.GetAll();
-                _response.Result = _mapper.Map<List<ToDoTaskDTO>>(tasks);
-                _response.StatusCode = HttpStatusCode.OK;
+                var toDoTaskDTOs = _mapper.Map<List<ToDoTaskDTO>>(tasks);
+                
+                _response.Generate200OK(toDoTaskDTOs);
                 return Ok(_response);
             }
             catch (Exception ex)
@@ -54,23 +55,22 @@ namespace ToDoList.API.Controllers
             {
                 if (id <= 0)
                 {
-                    _response.IsSuccess = false;
-                    _response.StatusCode = HttpStatusCode.BadRequest;
-                    _response.ErrorMessages = new List<string>() { "Id cannot be less or equal 0" };
+                    string error = "Id cannot be less or equal 0";
+                    _response.Generate400BadRequest(error);
                     return BadRequest(_response);
                 }
 
                 var task = _toDoTaskRepository.Get(v => v.Id == id, tracked: false);
                 if (task == null)
                 {
-                    _response.IsSuccess = false;
-                    _response.StatusCode = HttpStatusCode.NotFound;
-                    _response.ErrorMessages = new List<string>() { $"Entity with Id {id} not found" };
-                    return NotFound(_response);
+                    string error =  $"Entity with Id {id} not found";
+                    _response.Generate404NotFound(error);
+                    return BadRequest(_response);
                 }
 
-                _response.Result = _mapper.Map<ToDoTaskDTO>(task);
-                _response.StatusCode = HttpStatusCode.OK;
+                var toDoTaskDTO =  _mapper.Map<ToDoTaskDTO>(task);
+
+                _response.Generate200OK(toDoTaskDTO);
                 return Ok(_response);
             }
             catch (Exception ex)
@@ -92,18 +92,16 @@ namespace ToDoList.API.Controllers
             {
                 if (createDTO is null)
                 {
-                    _response.IsSuccess = false;
-                    _response.StatusCode = HttpStatusCode.BadRequest;
-                    _response.ErrorMessages = new List<string>() { "Argument is null" };
+                    string error = "Argument is null" ;
+                    _response.Generate400BadRequest(error);
                     return BadRequest(_response);
                 }
 
                 DateTime timeOfCreation = DateTime.Now;
                 if (createDTO.TaskEndTime < timeOfCreation)
                 {
-                    _response.IsSuccess = false;
-                    _response.StatusCode = HttpStatusCode.BadRequest;
-                    _response.ErrorMessages = new List<string>() { "Time of task end cannot be less than actual time" };
+                    string error = "Time of task end cannot be less than actual time";
+                    _response.Generate400BadRequest(error);
                     return BadRequest(_response);
                 }
 
@@ -127,7 +125,7 @@ namespace ToDoList.API.Controllers
         }
 
         [HttpDelete("{id:int}", Name = "DeleteTask")]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public ActionResult<APIResponse> DeleteTask(int id)
@@ -136,25 +134,23 @@ namespace ToDoList.API.Controllers
             {
                 if (id <= 0)
                 {
-                    _response.IsSuccess = false;
-                    _response.StatusCode = HttpStatusCode.BadRequest;
-                    _response.ErrorMessages = new List<string>() { "Id cannot be less or equal 0" };
+                    string error = "Id cannot be less or equal 0";
+                    _response.Generate400BadRequest(error);
                     return BadRequest(_response);
                 }
 
                 var villa = _toDoTaskRepository.Get(v => v.Id == id);
                 if (villa == null)
                 {
-                    _response.IsSuccess = false;
-                    _response.StatusCode = HttpStatusCode.NotFound;
-                    _response.ErrorMessages = new List<string>() { $"Entity with Id {id} not found" };
+                    string error = $"Entity with Id {id} not found";
+                    _response.Generate404NotFound(error);
                     return NotFound(_response);
                 }
 
                 _toDoTaskRepository.Remove(villa);
                 _toDoTaskRepository.Save();
-                _response.StatusCode = HttpStatusCode.NoContent;
-                _response.IsSuccess = true;
+                
+                _response.Generate204NoContent();
                 return Ok(_response);
             }
             catch (Exception ex)
@@ -176,30 +172,28 @@ namespace ToDoList.API.Controllers
             {
                 if (updateDTO is null || id != updateDTO.Id)
                 {
-                    _response.IsSuccess = false;
-                    _response.StatusCode = HttpStatusCode.BadRequest;
+                    string error = string.Empty;
                     if (updateDTO is null)
-                        _response.ErrorMessages = new List<string>() { "Argument is null" };
+                        error = "Argument is null";
                     else
-                        _response.ErrorMessages = new List<string>() { "Input Id and Id in body must match" };
+                        error = "Input Id and Id in body must match";
 
+                    _response.Generate400BadRequest(error);
                     return BadRequest(_response);
                 }
 
                 var taskFromDb = _toDoTaskRepository.Get(v => v.Id == id, tracked: false);
                 if (taskFromDb == null)
                 {
-                    _response.IsSuccess = false;
-                    _response.StatusCode = HttpStatusCode.NotFound;
-                    _response.ErrorMessages = new List<string>() { $"Entity with Id {id} not found" };
+                    string error = $"Entity with Id {id} not found";
+                    _response.Generate404NotFound(error);
                     return NotFound(_response);
                 }
                 
                 if (updateDTO.TaskEndTime < taskFromDb.TaskStartTime)
                 {
-                    _response.IsSuccess = false;
-                    _response.StatusCode = HttpStatusCode.BadRequest;
-                    _response.ErrorMessages = new List<string>() { "Time of task end cannot be less than actual time" };
+                    string error = "Time of task end cannot be less than actual time";
+                    _response.Generate400BadRequest(error);
                     return BadRequest(_response);
                 }
 
@@ -211,9 +205,8 @@ namespace ToDoList.API.Controllers
                 _toDoTaskRepository.Update(taskFromDb);
                 _toDoTaskRepository.Save();
                 
-                _response.StatusCode = HttpStatusCode.NoContent;
-                _response.IsSuccess = true;
-                _response.Result = _mapper.Map<ToDoTaskDTO>(taskFromDb);
+                var toDoTaskDTO =  _mapper.Map<ToDoTaskDTO>(taskFromDb);
+                _response.Generate200OK(toDoTaskDTO);
                 return Ok(_response);
             }
             catch (Exception ex)
