@@ -7,7 +7,7 @@ using ToDoList.DAL.Enum;
 
 namespace ToDoList.DAL.Entity
 {
-    internal class ToDoTask
+    public class ToDoTask
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]

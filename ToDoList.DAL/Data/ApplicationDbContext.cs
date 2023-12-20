@@ -9,13 +9,13 @@ using ToDoList.DAL.Entity;
 
 namespace ToDoList.DAL.Data
 {
-    internal class ApplicationDbContext : DbContext
+    public class ApplicationDbContext : DbContext
     {
         public ApplicationDbContext(DbContextOptions options)
             : base(options)
         {
         }
 
-        public DbSet<ToDoTask> MyProperty { get; set; }
+        public DbSet<ToDoTask> ToDoTasks { get; set; }
     }
 }
