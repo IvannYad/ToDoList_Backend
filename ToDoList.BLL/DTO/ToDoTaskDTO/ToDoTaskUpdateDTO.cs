@@ -23,9 +23,6 @@ namespace ToDoList.BLL.DTO.ToDoTaskDTO
         public string AdditionalDescription { get; set; }
 
         [Required]
-        public DateTime TaskStartTime { get; set; }
-
-        [Required]
         [DisplayName("Finish time")]
         public DateTime TaskEndTime { get; set; }
 

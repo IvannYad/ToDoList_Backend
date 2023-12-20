@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using ToDoList.BLL.DTO.ToDoTaskDTO;
@@ -106,7 +107,6 @@ namespace ToDoList.API.Controllers
                     return BadRequest(_response);
                 }
 
-
                 // If everything is ok, save task in database and produce response with code 201.
                 var task = _mapper.Map<ToDoTask>(createDTO);
                 task.TaskStartTime = timeOfCreation;
@@ -123,6 +123,100 @@ namespace ToDoList.API.Controllers
                 _response.ErrorMessages = new List<string>() { ex.ToString() };
             }
             
+            return _response;
+        }
+
+        [HttpDelete("{id:int}", Name = "DeleteTask")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public ActionResult<APIResponse> DeleteTask(int id)
+        {
+            try
+            {
+                if (id <= 0)
+                {
+                    _response.IsSuccess = false;
+                    _response.StatusCode = HttpStatusCode.BadRequest;
+                    _response.ErrorMessages = new List<string>() { "Id cannot be less or equal 0" };
+                    return BadRequest(_response);
+                }
+
+                var villa = _toDoTaskRepository.Get(v => v.Id == id);
+                if (villa == null)
+                {
+                    _response.IsSuccess = false;
+                    _response.StatusCode = HttpStatusCode.NotFound;
+                    _response.ErrorMessages = new List<string>() { $"Entity with Id {id} not found" };
+                    return NotFound(_response);
+                }
+
+                _toDoTaskRepository.Remove(villa);
+                _toDoTaskRepository.Save();
+                _response.StatusCode = HttpStatusCode.NoContent;
+                _response.IsSuccess = true;
+                return Ok(_response);
+            }
+            catch (Exception ex)
+            {
+                _response.IsSuccess = false;
+                _response.ErrorMessages = new List<string>() { ex.ToString() };
+            }
+
+            return _response;
+        }
+
+        [HttpPut("{id:int}", Name = "UpdateTask")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public ActionResult<APIResponse> UpdateVilla(int id, [FromBody] ToDoTaskUpdateDTO updateDTO)
+        {
+            try
+            {
+                if (updateDTO is null || id != updateDTO.Id)
+                {
+                    _response.IsSuccess = false;
+                    _response.StatusCode = HttpStatusCode.BadRequest;
+                    if (updateDTO is null)
+                        _response.ErrorMessages = new List<string>() { "Argument is null" };
+                    else
+                        _response.ErrorMessages = new List<string>() { "Input Id and Id in body must match" };
+
+                    return BadRequest(_response);
+                }
+
+                var taskFromDb = _toDoTaskRepository.Get(v => v.Id == id);
+                if (taskFromDb == null)
+                {
+                    _response.IsSuccess = false;
+                    _response.StatusCode = HttpStatusCode.NotFound;
+                    _response.ErrorMessages = new List<string>() { $"Entity with Id {id} not found" };
+                    return NotFound(_response);
+                }
+                
+                if (updateDTO.TaskEndTime < taskFromDb.TaskStartTime)
+                {
+                    _response.IsSuccess = false;
+                    _response.StatusCode = HttpStatusCode.BadRequest;
+                    _response.ErrorMessages = new List<string>() { "Time of task end cannot be less than actual time" };
+                    return BadRequest(_response);
+                }
+
+                // If Everything is ok.
+                taskFromDb = _mapper.Map<ToDoTask>(updateDTO);
+                
+                _toDoTaskRepository.Update(taskFromDb);
+                _toDoTaskRepository.Save();
+                _response.StatusCode = HttpStatusCode.NoContent;
+                _response.IsSuccess = true;
+                return Ok(_response);
+            }
+            catch (Exception ex)
+            {
+                _response.IsSuccess = false;
+                _response.ErrorMessages = new List<string>() { ex.ToString() };
+            }
 
             return _response;
         }
