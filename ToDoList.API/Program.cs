@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using ToDoList.DAL.Data;
+using ToDoList.DAL.Repository;
+using ToDoList.DAL.Repository.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,6 +17,9 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("Default"));
 });
+
+// Add ToDoListRepository to services.
+builder.Services.AddScoped<IToDoTaskRepository, ToDoTaskRepository>();
 
 var app = builder.Build();
 
