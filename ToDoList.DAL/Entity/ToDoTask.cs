@@ -16,6 +16,7 @@ namespace ToDoList.DAL.Entity
         [Required]
         [MinLength(5)]
         [MaxLength(50)]
+        [DisplayName("Title")]
         public string TaskTitle { get; set; }
 
         [Required]
