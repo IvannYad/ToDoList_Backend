@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using ToDoList.BLL.Mapping.ToDoTaskMapping;
 using ToDoList.DAL.Data;
 using ToDoList.DAL.Repository;
 using ToDoList.DAL.Repository.Interfaces;
@@ -20,6 +21,9 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 
 // Add ToDoListRepository to services.
 builder.Services.AddScoped<IToDoTaskRepository, ToDoTaskRepository>();
+
+// Add mapper.
+builder.Services.AddAutoMapper(typeof(ToDoTaskMapper));
 
 var app = builder.Build();
 
