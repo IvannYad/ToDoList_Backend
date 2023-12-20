@@ -7,7 +7,7 @@ using ToDoList.DAL.Enum;
 
 namespace ToDoList.DAL.Entity
 {
-    internal class Task
+    internal class ToDoTask
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -31,6 +31,6 @@ namespace ToDoList.DAL.Entity
         public DateTime TaskEndTime { get; set; }
 
         [Required]
-        public TasksStatus Status { get; set; }
+        public ToDoTaskStatus Status { get; set; }
     }
 }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ToDoList.DAL.Repository.Interfaces
 {
-    public interface ITaskRepository
+    public interface IToDoTaskRepository
     {
     }
 }

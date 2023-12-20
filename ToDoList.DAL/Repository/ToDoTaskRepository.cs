@@ -4,12 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ToDoList.DAL.Enum
+namespace ToDoList.DAL.Repository
 {
-    public enum TasksStatus
+    internal class ToDoTaskRepository
     {
-        ToDo,
-        InProgress,
-        Done
     }
 }
