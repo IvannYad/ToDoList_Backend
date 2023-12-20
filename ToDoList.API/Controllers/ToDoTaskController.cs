@@ -60,7 +60,7 @@ namespace ToDoList.API.Controllers
                     return BadRequest(_response);
                 }
 
-                var task = _toDoTaskRepository.Get(v => v.Id == id);
+                var task = _toDoTaskRepository.Get(v => v.Id == id, tracked: false);
                 if (task == null)
                 {
                     _response.IsSuccess = false;
@@ -167,7 +167,7 @@ namespace ToDoList.API.Controllers
         }
 
         [HttpPut("{id:int}", Name = "UpdateTask")]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public ActionResult<APIResponse> UpdateVilla(int id, [FromBody] ToDoTaskUpdateDTO updateDTO)
@@ -186,7 +186,7 @@ namespace ToDoList.API.Controllers
                     return BadRequest(_response);
                 }
 
-                var taskFromDb = _toDoTaskRepository.Get(v => v.Id == id);
+                var taskFromDb = _toDoTaskRepository.Get(v => v.Id == id, tracked: false);
                 if (taskFromDb == null)
                 {
                     _response.IsSuccess = false;
@@ -204,12 +204,16 @@ namespace ToDoList.API.Controllers
                 }
 
                 // If Everything is ok.
+                DateTime timeOfCreation = taskFromDb.TaskStartTime;
                 taskFromDb = _mapper.Map<ToDoTask>(updateDTO);
+                taskFromDb.TaskStartTime = timeOfCreation;
                 
                 _toDoTaskRepository.Update(taskFromDb);
                 _toDoTaskRepository.Save();
+                
                 _response.StatusCode = HttpStatusCode.NoContent;
                 _response.IsSuccess = true;
+                _response.Result = _mapper.Map<ToDoTaskDTO>(taskFromDb);
                 return Ok(_response);
             }
             catch (Exception ex)
