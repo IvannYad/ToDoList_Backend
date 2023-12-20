@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ToDoList.DAL.Data;
 
@@ -11,9 +12,10 @@ using ToDoList.DAL.Data;
 namespace ToDoList.DAL.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231220143622_AddInitialDataToDatabase")]
+    partial class AddInitialDataToDatabase
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -33,75 +35,70 @@ namespace ToDoList.DAL.Migrations
                     b.Property<string>("AdditionalDescription")
                         .IsRequired()
                         .HasMaxLength(80)
-                        .HasColumnType("nvarchar(80)")
-                        .HasColumnName("Description");
+                        .HasColumnType("nvarchar(80)");
 
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("TaskEndTime")
-                        .HasColumnType("datetime2")
-                        .HasColumnName("End time");
+                        .HasColumnType("datetime2");
 
                     b.Property<DateTime>("TaskStartTime")
-                        .HasColumnType("datetime2")
-                        .HasColumnName("Start time");
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("TaskTitle")
                         .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)")
-                        .HasColumnName("Title");
+                        .HasColumnType("nvarchar(50)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Tasks");
+                    b.ToTable("ToDoTasks");
 
                     b.HasData(
                         new
                         {
                             Id = 1,
                             AdditionalDescription = "Just do nothing",
-                            Status = "Done",
-                            TaskEndTime = new DateTime(2023, 12, 21, 16, 47, 53, 532, DateTimeKind.Local).AddTicks(3848),
-                            TaskStartTime = new DateTime(2023, 12, 20, 16, 47, 53, 532, DateTimeKind.Local).AddTicks(3802),
+                            Status = 2,
+                            TaskEndTime = new DateTime(2023, 12, 21, 16, 36, 21, 890, DateTimeKind.Local).AddTicks(2754),
+                            TaskStartTime = new DateTime(2023, 12, 20, 16, 36, 21, 890, DateTimeKind.Local).AddTicks(2712),
                             TaskTitle = "Do nothing1"
                         },
                         new
                         {
                             Id = 2,
                             AdditionalDescription = "Just do nothing",
-                            Status = "In progress",
-                            TaskEndTime = new DateTime(2023, 12, 21, 16, 47, 53, 532, DateTimeKind.Local).AddTicks(3858),
-                            TaskStartTime = new DateTime(2023, 12, 20, 16, 47, 53, 532, DateTimeKind.Local).AddTicks(3856),
+                            Status = 1,
+                            TaskEndTime = new DateTime(2023, 12, 21, 16, 36, 21, 890, DateTimeKind.Local).AddTicks(2760),
+                            TaskStartTime = new DateTime(2023, 12, 20, 16, 36, 21, 890, DateTimeKind.Local).AddTicks(2758),
                             TaskTitle = "Do nothing2"
                         },
                         new
                         {
                             Id = 3,
                             AdditionalDescription = "Just do nothing",
-                            Status = "In progress",
-                            TaskEndTime = new DateTime(2023, 12, 21, 16, 47, 53, 532, DateTimeKind.Local).AddTicks(3864),
-                            TaskStartTime = new DateTime(2023, 12, 20, 16, 47, 53, 532, DateTimeKind.Local).AddTicks(3862),
+                            Status = 1,
+                            TaskEndTime = new DateTime(2023, 12, 21, 16, 36, 21, 890, DateTimeKind.Local).AddTicks(2764),
+                            TaskStartTime = new DateTime(2023, 12, 20, 16, 36, 21, 890, DateTimeKind.Local).AddTicks(2762),
                             TaskTitle = "Do nothing3"
                         },
                         new
                         {
                             Id = 4,
                             AdditionalDescription = "Just do nothing",
-                            Status = "To do",
-                            TaskEndTime = new DateTime(2023, 12, 22, 16, 47, 53, 532, DateTimeKind.Local).AddTicks(3870),
-                            TaskStartTime = new DateTime(2023, 12, 20, 16, 47, 53, 532, DateTimeKind.Local).AddTicks(3867),
+                            Status = 0,
+                            TaskEndTime = new DateTime(2023, 12, 22, 16, 36, 21, 890, DateTimeKind.Local).AddTicks(2769),
+                            TaskStartTime = new DateTime(2023, 12, 20, 16, 36, 21, 890, DateTimeKind.Local).AddTicks(2767),
                             TaskTitle = "Do nothing4"
                         },
                         new
                         {
                             Id = 5,
                             AdditionalDescription = "Just do nothing",
-                            Status = "To do",
-                            TaskEndTime = new DateTime(2023, 12, 23, 16, 47, 53, 532, DateTimeKind.Local).AddTicks(3875),
-                            TaskStartTime = new DateTime(2023, 12, 20, 16, 47, 53, 532, DateTimeKind.Local).AddTicks(3873),
+                            Status = 0,
+                            TaskEndTime = new DateTime(2023, 12, 23, 16, 36, 21, 890, DateTimeKind.Local).AddTicks(2773),
+                            TaskStartTime = new DateTime(2023, 12, 20, 16, 36, 21, 890, DateTimeKind.Local).AddTicks(2771),
                             TaskTitle = "Do nothing5"
                         });
                 });

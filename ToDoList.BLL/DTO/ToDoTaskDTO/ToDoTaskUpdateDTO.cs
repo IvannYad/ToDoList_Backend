@@ -3,10 +3,6 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ToDoList.DAL.Enum;
 
 namespace ToDoList.BLL.DTO.ToDoTaskDTO
 {
@@ -34,6 +30,6 @@ namespace ToDoList.BLL.DTO.ToDoTaskDTO
         public DateTime TaskEndTime { get; set; }
 
         [Required]
-        public ToDoTaskStatus Status { get; set; }
+        public string Status { get; set; }
     }
 }
