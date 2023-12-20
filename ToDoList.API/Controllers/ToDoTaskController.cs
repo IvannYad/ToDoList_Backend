@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using ToDoList.BLL.DTO.ToDoTaskDTO;
 using ToDoList.BLL.GeneralTypes;
+using ToDoList.BLL.Services.Validators;
+using ToDoList.BLL.Services.Validators.Interfaces;
 using ToDoList.DAL.Entity;
 using ToDoList.DAL.Repository.Interfaces;
 
@@ -16,11 +18,13 @@ namespace ToDoList.API.Controllers
         protected APIResponse _response;
         private readonly IToDoTaskRepository _toDoTaskRepository;
         private readonly IMapper _mapper;
+        private readonly IToDoTaskValidator _validator;
         public ToDoTaskController(IToDoTaskRepository toDoTaskRepository, IMapper mapper)
         {
             _toDoTaskRepository = toDoTaskRepository;
             _mapper = mapper;
             _response = new() { ErrorMessages = new List<string>()};
+            _validator = new ToDoTaskValidator();
         }
 
         [HttpGet]
@@ -53,7 +57,7 @@ namespace ToDoList.API.Controllers
         {
             try
             {
-                if (id <= 0)
+                if (_validator.IsIdValid(id))
                 {
                     string error = "Id cannot be less or equal 0";
                     _response.Generate400BadRequest(error);
@@ -90,7 +94,7 @@ namespace ToDoList.API.Controllers
         {
             try
             {
-                if (createDTO is null)
+                if (_validator.IsCreateDTOValid(createDTO))
                 {
                     string error = "Argument is null" ;
                     _response.Generate400BadRequest(error);
@@ -98,7 +102,7 @@ namespace ToDoList.API.Controllers
                 }
 
                 DateTime timeOfCreation = DateTime.Now;
-                if (createDTO.TaskEndTime < timeOfCreation)
+                if (_validator.IsEndTimeValid(timeOfCreation, createDTO.TaskEndTime))
                 {
                     string error = "Time of task end cannot be less than actual time";
                     _response.Generate400BadRequest(error);
@@ -132,7 +136,7 @@ namespace ToDoList.API.Controllers
         {
             try
             {
-                if (id <= 0)
+                if (_validator.IsIdValid(id))
                 {
                     string error = "Id cannot be less or equal 0";
                     _response.Generate400BadRequest(error);
@@ -170,7 +174,7 @@ namespace ToDoList.API.Controllers
         {
             try
             {
-                if (updateDTO is null || id != updateDTO.Id)
+                if (_validator.IsUpdateDTOValid(id, updateDTO))
                 {
                     string error = string.Empty;
                     if (updateDTO is null)
@@ -190,7 +194,7 @@ namespace ToDoList.API.Controllers
                     return NotFound(_response);
                 }
                 
-                if (updateDTO.TaskEndTime < taskFromDb.TaskStartTime)
+                if (_validator.IsEndTimeValid(taskFromDb.TaskStartTime, updateDTO.TaskEndTime))
                 {
                     string error = "Time of task end cannot be less than actual time";
                     _response.Generate400BadRequest(error);
