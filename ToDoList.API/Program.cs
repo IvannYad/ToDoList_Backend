@@ -25,6 +25,9 @@ builder.Services.AddScoped<IToDoTaskRepository, ToDoTaskRepository>();
 // Add mapper.
 builder.Services.AddAutoMapper(typeof(ToDoTaskMapper));
 
+// Use cors.
+builder.Services.AddCors();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -33,6 +36,11 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseCors(oprions =>
+{
+    oprions.WithOrigins("http://localhost:5173");
+});
 
 app.UseHttpsRedirection();
 
