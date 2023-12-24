@@ -13,6 +13,6 @@ namespace ToDoList.DAL.Utility
         public const string DoneStatus = "Done";
 
         public const string FeatureType = "feature";
-        public const string bugType = "bug";
+        public const string BugType = "bug";
     }
 }
