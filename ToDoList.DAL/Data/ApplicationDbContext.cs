@@ -23,7 +23,8 @@ namespace ToDoList.DAL.Data
                     AdditionalDescription = "Just do nothing",
                     TaskStartTime = DateTime.Now,
                     TaskEndTime = DateTime.Now.AddDays(1),
-                    Status = StaticData.DoneStatus
+                    Status = StaticData.DoneStatus,
+                    Type = StaticData.FeatureType
                 },
                 new ToDoTask
                 {
@@ -32,7 +33,8 @@ namespace ToDoList.DAL.Data
                     AdditionalDescription = "Just do nothing",
                     TaskStartTime = DateTime.Now,
                     TaskEndTime = DateTime.Now.AddDays(1),
-                    Status = StaticData.InProgressStatus
+                    Status = StaticData.InProgressStatus,
+                    Type = StaticData.BugType
                 },
                 new ToDoTask
                 {
@@ -41,7 +43,8 @@ namespace ToDoList.DAL.Data
                     AdditionalDescription = "Just do nothing",
                     TaskStartTime = DateTime.Now,
                     TaskEndTime = DateTime.Now.AddDays(1),
-                    Status = StaticData.InProgressStatus
+                    Status = StaticData.InProgressStatus,
+                    Type = StaticData.FeatureType
                 },
                 new ToDoTask
                 {
@@ -50,7 +53,8 @@ namespace ToDoList.DAL.Data
                     AdditionalDescription = "Just do nothing",
                     TaskStartTime = DateTime.Now,
                     TaskEndTime = DateTime.Now.AddDays(2),
-                    Status = StaticData.ToDoStatus
+                    Status = StaticData.ToDoStatus,
+                    Type = StaticData.BugType
                 },
                 new ToDoTask
                 {
@@ -59,7 +63,8 @@ namespace ToDoList.DAL.Data
                     AdditionalDescription = "Just do nothing",
                     TaskStartTime = DateTime.Now,
                     TaskEndTime = DateTime.Now.AddDays(3),
-                    Status = StaticData.ToDoStatus
+                    Status = StaticData.ToDoStatus,
+                    Type = StaticData.FeatureType
                 }
                 );
         }

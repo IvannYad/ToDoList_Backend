@@ -40,5 +40,9 @@ namespace ToDoList.DAL.Entity
         [Required]
         [Display(Order = 6)]
         public string Status { get; set; }
+        
+        [Required]
+        [Display(Order = 7)]
+        public string Type { get; set; }
     }
 }
