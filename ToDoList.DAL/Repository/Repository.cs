@@ -24,9 +24,13 @@ namespace ToDoList.DAL.Repository
             _dbSet.Add(item);
         }
 
-        public T? Get(Expression<Func<T, bool>> selector)
+        public T? Get(Expression<Func<T, bool>> selector, bool tracked = true)
         {
-            return _dbSet.FirstOrDefault(selector);
+            IQueryable<T> query = _dbSet;
+            if (!tracked)
+                query = query.AsNoTracking();
+
+            return query.FirstOrDefault(selector);
         }
 
         public IEnumerable<T>? GetAll(Expression<Func<T, bool>>? filter = null)
