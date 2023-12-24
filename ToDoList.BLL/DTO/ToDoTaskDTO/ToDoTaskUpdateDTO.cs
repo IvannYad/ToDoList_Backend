@@ -28,5 +28,7 @@ namespace ToDoList.BLL.DTO.ToDoTaskDTO
 
         [Required]
         public string Status { get; set; }
+        [Required]
+        public string Type { get; set; }
     }
 }
